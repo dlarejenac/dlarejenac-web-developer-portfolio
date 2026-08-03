@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerald David Cane — Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0A0A;
+    --bg-elevated: #131313;
+    --bg-elevated-2: #1C1C1C;
+    --grid-line: rgba(255, 255, 255, 0.045);
+    --grid-line-strong: rgba(255, 255, 255, 0.09);
+    --text-primary: #F5F5F5;
+    --text-secondary: #A0A0A0;
+    --text-dim: #6B6B6B;
+    --accent-amber: #3FE0E0;
+    --accent-teal: #C9C9C9;
+    --laravel-color: #F05340;
+    --vuejs-color: #42B883;
+    --border: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.30);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text-primary);
+    font-family:var(--sans);
+    line-height:1.6;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* blueprint grid backdrop */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:48px 48px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px);
+    background-size:240px 240px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* corner crop marks, fixed to viewport */
+  .crop{
+    position:fixed;
+    width:22px;
+    height:22px;
+    border-color:var(--border-strong);
+    z-index:5;
+    pointer-events:none;
+  }
+  .crop-tl{ top:20px; left:20px; border-top:1px solid; border-left:1px solid; }
+  .crop-tr{ top:20px; right:20px; border-top:1px solid; border-right:1px solid; }
+  .crop-bl{ bottom:20px; left:20px; border-bottom:1px solid; border-left:1px solid; }
+  .crop-br{ bottom:20px; right:20px; border-bottom:1px solid; border-right:1px solid; }
+
+  /* eyebrow / label style shared */
+  .label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent-teal);
+  }
+
+  /* Match the styling of the company links */
+  .rev-tag a{
+    color:var(--text-secondary);
+    text-decoration:underline;
+    text-decoration-color:var(--border-strong);
+    text-underline-offset:3px;
+    transition:color 0.2s ease;
+  }
+
+  .rev-tag a:hover,
+  .rev-tag a:focus-visible{
+    color:var(--accent-teal);
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:rgba(10,10,10,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:18px;
+    padding-bottom:18px;
+  }
+  .nav-mark{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.05em;
+    color:var(--text-primary);
+  }
+  .nav-mark span{ color:var(--accent-amber); }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+  }
+  .nav-links a{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-secondary);
+    text-decoration:none;
+    transition:color 0.2s ease;
+    border-bottom:1px solid transparent;
+    padding-bottom:2px;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{
+    color:var(--accent-teal);
+    border-bottom-color:var(--accent-teal);
+  }
+
+  /* ===== HERO / TITLE BLOCK ===== */
+  header.hero{
+    padding:96px 0 72px;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:56px;
+    align-items:center;
+  }
+  .rev-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .rev-tag::before{
+    content:'';
+    width:8px; height:8px;
+    background:var(--accent-amber);
+    display:inline-block;
+  }
+  h1.name{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:clamp(34px, 5vw, 56px);
+    letter-spacing:0.01em;
+    line-height:1.08;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .role-line{
+    font-family:var(--mono);
+    font-size:16px;
+    color:var(--accent-amber);
+    margin-bottom:22px;
+    letter-spacing:0.02em;
+  }
+  .hero-desc{
+    font-size:17px;
+    color:var(--text-secondary);
+    max-width:52ch;
+    margin-bottom:32px;
+  }
+  .hero-cta{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:13px 22px;
+    display:inline-block;
+    transition:all 0.2s ease;
+    border:1px solid var(--border-strong);
+  }
+  .btn-primary{
+    background:var(--accent-amber);
+    color:#0A0A0A;
+    border-color:var(--accent-amber);
+    font-weight:600;
+  }
+  .btn-primary:hover, .btn-primary:focus-visible{
+    background:transparent;
+    color:var(--accent-amber);
+  }
+  .btn-ghost{
+    color:var(--text-primary);
+    background:transparent;
+  }
+  .btn-ghost:hover, .btn-ghost:focus-visible{
+    border-color:var(--accent-teal);
+    color:var(--accent-teal);
+  }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--accent-teal); outline-offset:3px; }
+
+  /* schematic diagram */
+  .diagram-frame{
+    border:1px solid var(--border);
+    background:var(--bg-elevated);
+    padding:18px;
+    position:relative;
+  }
+  .diagram-frame .label{ display:block; margin-bottom:10px; }
+  .diagram-frame svg{ width:100%; height:auto; display:block; }
+
+  .node-box{ fill:var(--bg-elevated-2); stroke:var(--border-strong); stroke-width:1; }
+  .node-text{ font-family:var(--mono); font-size:9.5px; fill:var(--text-secondary); text-transform:uppercase; letter-spacing:0.04em; }
+  .node-text1{ font-family:var(--mono); font-size:9.5px; fill:var(--laravel-color); text-transform:uppercase; letter-spacing:0.04em; }
+  .node-text2{ font-family:var(--mono); font-size:9.5px; fill:var(--vuejs-color); text-transform:uppercase; letter-spacing:0.04em; }
+  .node-text-strong{ font-family:var(--mono); font-size:10.5px; fill:var(--text-primary); font-weight:600; }
+  .conn-line{
+    fill:none;
+    stroke:var(--text-primary);
+    stroke-width:1.2;
+    stroke-dasharray:6 4;
+    stroke-dashoffset:200;
+    animation:draw 2.2s ease forwards;
+  }
+  .conn-line.delay{ animation-delay:0.4s; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  .pin{ fill:var(--accent-amber); }
+
+  /* ===== SECTION SHELL ===== */
+  section{
+    padding:80px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:44px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  h2.section-title{
+    font-family:var(--mono);
+    font-size:26px;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-body{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+  }
+  .about-body p{
+    color:var(--text-secondary);
+    font-size:16px;
+    margin-bottom:16px;
+  }
+  .stat-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+  }
+  .stat{
+    background:var(--bg-elevated);
+    padding:20px 16px;
+  }
+  .stat-num1{
+    font-family:var(--mono);
+    font-size:24px;
+    color:var(--accent-amber);
+    display:block;
+    margin-bottom:6px;
+  }
+  .stat-num2{
+    font-family:var(--mono);
+    font-size:24px;
+    color:var(--laravel-color);
+    display:block;
+    margin-bottom:6px;
+  }
+  .stat-num3{
+    font-family:var(--mono);
+    font-size:24px;
+    color:var(--vuejs-color);
+    display:block;
+    margin-bottom:6px;
+  }
+  .stat-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--text-dim);
+  }
+
+  /* ===== EXPERIENCE — modules ===== */
+  .module{
+    border:1px solid var(--border);
+    background:var(--bg-elevated);
+    margin-bottom:24px;
+    transition:border-color 0.2s ease, background 0.2s ease;
+  }
+  .module:hover, .module:focus-within{
+    border-color:var(--accent-amber);
+    background:var(--bg-elevated-2);
+  }
+  .module-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:22px 26px;
+    border-bottom:1px solid var(--border);
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .module-id{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--accent-amber);
+    letter-spacing:0.06em;
+    margin-bottom:6px;
+    display:block;
+  }
+  .module-role{
+    font-family:var(--mono);
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .module-org{
+    color:var(--text-secondary);
+    font-size:14px;
+  }
+  .module-org a{ color:var(--text-secondary); text-decoration:underline; text-decoration-color:var(--border-strong); text-underline-offset:3px; }
+  .module-org a:hover{ color:var(--accent-teal); }
+  .module-meta{
+    text-align:right;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--accent-amber);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    white-space:nowrap;
+  }
+  .module-body{
+    padding:22px 26px;
+    list-style:none;
+  }
+  .module-body li{
+    position:relative;
+    padding-left:22px;
+    color:var(--text-secondary);
+    font-size:15px;
+    margin-bottom:12px;
+  }
+  .module-body li:last-child{ margin-bottom:0; }
+  .module-body li::before{
+    content:'▸';
+    position:absolute;
+    left:0;
+    color:var(--accent-teal);
+    font-size:13px;
+  }
+
+  /* ===== SKILLS — component legend ===== */
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.03em;
+    color:var(--text-secondary);
+    border:1px solid var(--border);
+    padding:9px 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--bg-elevated);
+  }
+  .chip::before{
+    content:'';
+    width:6px; height:6px;
+    background:var(--accent-amber);
+  }
+
+  /* ===== CONTACT / TITLE BLOCK FOOTER ===== */
+  footer{
+    padding:72px 0 100px;
+  }
+  .titleblock{
+    border:1px solid var(--border-strong);
+  }
+  .titleblock-top{
+    padding:28px 32px;
+    border-bottom:1px solid var(--border);
+  }
+  .titleblock-top h2{
+    font-family:var(--mono);
+    font-size:22px;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .titleblock-top p{
+    color:var(--text-secondary);
+    max-width:96ch;
+    font-size:15px;
+  }
+  .tb-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+  }
+  .tb-cell{
+    padding:18px 20px;
+    border-top:1px solid var(--border);
+    border-right:1px solid var(--border);
+  }
+  .tb-cell:last-child{ border-right:none; }
+  .tb-cell .label{ display:block; margin-bottom:8px; color:var(--text-dim); }
+  .tb-cell a, .tb-cell span{
+    font-family:var(--mono);
+    font-size:13.5px;
+    color:var(--text-primary);
+    text-decoration:none;
+  }
+  .tb-cell a:hover{ color:var(--accent-amber); }
+
+  .fine-print{
+    text-align:center;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-dim);
+    letter-spacing:0.04em;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .about-body{ grid-template-columns:1fr; }
+    .stat-strip{ grid-template-columns:1fr; }
+    .tb-grid{ grid-template-columns:1fr 1fr; }
+    .nav-links{ gap:16px; }
+  }
+  @media (max-width: 520px){
+    .wrap{ padding:0 20px; }
+    header.hero{ padding:72px 0 48px; }
+    .tb-grid{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
+    .crop{ display:none; }
+  }
+
+  /* reveal on scroll */
+  .reveal{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="crop crop-tl"></div>
+<div class="crop crop-tr"></div>
+<div class="crop crop-bl"></div>
+<div class="crop crop-br"></div>
+
+<nav>
+  <div class="wrap">
+    <!-- <div class="nav-mark">JD<span>·</span>CANE</div> --!>
+    <ul class="nav-links">
+      <li><a href="#work">Experience</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="rev-tag label">Portfolio · <a href="https://drive.google.com/file/d/1LoQux0az_thcZm4sx9ORawGZr60dvKFl/view?usp=sharing" target="_blank" rel="noopener">Curriculum Vitae</a></div>
+      <h1 class="name">Jerald David<br>Cane</h1>
+      <div class="role-line">Web Developer — Laravel &amp; Vue.js</div>
+      <p class="hero-desc">With one year of experience in full-stack development,
+        specializing in designing, developing, and implementing modular web applications and software solutions.
+        Collaborated with cross-functional teams, translating client requirements into functional modules,
+        and delivering scalable, efficient, and maintainable applications</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#work">View experience</a>
+        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="diagram-frame">
+      <span class="label">System overview</span>
+      <svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing the developer connected to two system modules: accident and incident reporting, and shipping management, built on Laravel and Vue.js">
+        <rect x="105" y="10" width="110" height="40" class="node-box"/>
+        <text x="160" y="26" text-anchor="middle" class="node-text">Developer</text>
+        <text x="160" y="40" text-anchor="middle" class="node-text-strong">J. D. Cane</text>
+
+        <path class="conn-line" d="M160 50 L160 80 L60 80 L60 110" />
+        <path class="conn-line delay" d="M160 50 L160 80 L260 80 L260 110" />
+
+        <rect x="10" y="110" width="100" height="52" class="node-box"/>
+        <!-- <text x="60" y="130" text-anchor="middle" class="node-text">Mod-01</text> --!>
+        <text x="60" y="144" text-anchor="middle" class="node-text-strong" font-size="9">Incident Reports</text>
+        <circle cx="60" cy="110" r="2.5" class="pin"/>
+
+        <rect x="210" y="110" width="100" height="52" class="node-box"/>
+        <!-- <text x="260" y="130" text-anchor="middle" class="node-text">Mod-02</text> --!>
+        <text x="260" y="144" text-anchor="middle" class="node-text-strong" font-size="9">Shipping Ops</text>
+        <circle cx="260" cy="110" r="2.5" class="pin"/>
+
+        <path class="conn-line" d="M60 162 L60 190 L260 190 L260 162" />
+
+        <rect x="35" y="200" width="60" height="30" class="node-box"/>
+        <text x="65" y="219" text-anchor="middle" class="node-text1" font-size="8">Laravel</text>
+
+        <rect x="120" y="200" width="80" height="30" class="node-box"/>
+        <text x="160" y="219" text-anchor="middle" class="node-text" font-size="8">RESTful API</text>
+
+        <rect x="225" y="200" width="60" height="30" class="node-box"/>
+        <text x="255" y="219" text-anchor="middle" class="node-text2" font-size="8">Vue.js</text>
+
+        <path class="conn-line delay" d="M60 190 L65 200 M160 190 L160 200 M260 190 L255 200" />
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">About</h2>
+      <!-- <span class="label">Summary</span> --!>
+    </div>
+    <div class="about-body">
+      <div>
+        <p>I work across the stack, but I lean into the structural side of things — designing the modules, API contracts, and database relationships that let a system grow without breaking. Laravel and Vue.js are my primary tools, paired with Tailwind CSS and RESTful APIs to ship interfaces that stay usable as the underlying system gets more complex.</p>
+        <p>Recent work includes reporting and operations tooling built for teams that need reliability first — clear module boundaries, responsive component-based UIs, and enough documentation and demoing that stakeholders trust what's shipped.</p>
+      </div>
+      <div class="stat-strip">
+        <div class="stat">
+          <span class="stat-num1">2+</span>
+          <span class="stat-label">Systems shipped</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num2">Laravel</span>
+          <span class="stat-label">Primary framework</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num3">Vue.js</span>
+          <span class="stat-label">Frontend of choice</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Experience</h2>
+      <!-- <span class="label">Module log</span> --!>
+    </div>
+
+    <article class="module reveal">
+      <div class="module-head">
+        <div>
+          <!-- <span class="module-id">Mod-01 — Active</span> --!>
+          <div class="module-role">Web Developer</div>
+          <div class="module-org"><a href="https://www.linkedin.com/company/99711045/" target="_blank" rel="noopener">Elite Software and Data Security Inc.</a> · Manila, Philippines · Full-time</div>
+        </div>
+        <div class="module-meta">Jun 2025 – Present</div>
+      </div>
+      <ul class="module-body">
+        <li>Developed and maintained a modular web-based system for managing accident and incident reports and shipping management operations, building scalable modules with Laravel and RESTful API integration.</li>
+        <li>Built responsive, component-based user interfaces with Vue.js and Tailwind CSS to improve usability and overall user experience.</li>
+        <li>Presented system modules directly to clients, demonstrating functionality, implementation, and alignment with business requirements.</li>
+      </ul>
+    </article>
+
+    <article class="module reveal">
+      <div class="module-head">
+        <div>
+          <!-- <span class="module-id">Mod-02 — Completed</span> --!>
+          <div class="module-role">PHP Developer (Internship)</div>
+          <div class="module-org"><a href="https://www.linkedin.com/company/106451404/" target="_blank" rel="noopener">Go8 Technology Inc.</a> · Parañaque, Philippines · Internship</div>
+        </div>
+        <div class="module-meta">Mar 2024 – May 2024 · 3 mos</div>
+      </div>
+      <ul class="module-body">
+        <li>Designed and implemented Eloquent ORM database relationships in Laravel.</li>
+        <li>Applied object-oriented programming (OOP) principles to maintain and develop web applications.</li>
+        <li>Gained hands-on experience with Laravel, Git, MySQL, and JavaScript.</li>
+        <li>Designed and developed responsive web applications using Bootstrap.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Stack</h2>
+      <!-- <span class="label">Component legend</span> --!>
+    </div>
+    <div class="legend">
+      <span class="chip">Laravel</span>
+      <span class="chip">Vue.js</span>
+      <span class="chip">Tailwind CSS</span>
+      <span class="chip">RESTful APIs</span>
+      <span class="chip">Eloquent ORM</span>
+      <span class="chip">OOP</span>
+      <span class="chip">MySQL</span>
+      <span class="chip">Git</span>
+      <span class="chip">Bootstrap</span>
+      <span class="chip">JavaScript</span>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="titleblock">
+      <div class="titleblock-top">
+        <h2>CONTACT</h2>
+        <p>Open to web developer roles. Reach out through any of my channels below.</p>
+      </div>
+      <div class="tb-grid">
+        <div class="tb-cell">
+          <span class="label">Email</span>
+          <a href="mailto:cane.jeralddavid@gmail.com">cane.jeralddavid@gmail.com</a>
+        </div>
+        <div class="tb-cell">
+          <span class="label">LinkedIn</span>
+          <a href="https://www.linkedin.com/in/jerald-david-cane/" target="_blank" rel="noopener">linkedin.com/in/jerald-david-cane/</a>
+        </div>
+        <div class="tb-cell">
+          <span class="label">GitHub</span>
+          <a href="https://github.com/dlarejenac" target="_blank" rel="noopener">github.com/dlarejenac</a>
+        </div>
+        <div class="tb-cell">
+          <span class="label">Location</span>
+          <span>Malabon City, Philippines</span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="fine-print">© 2026 Jerald David Cane — Drawn to scale, built to last.</div> --!>
+    <div class="fine-print">© 2026 Jerald David Cane</div>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
